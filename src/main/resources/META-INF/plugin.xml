@@ -19,6 +19,7 @@
   <depends>com.intellij.modules.lang</depends>
   <depends>com.intellij.modules.platform</depends>
   <depends>JavaScript</depends>
+  <depends>com.intellij.database</depends>
 
   <actions>
     <!--

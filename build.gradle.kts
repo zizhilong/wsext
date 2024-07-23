@@ -20,7 +20,7 @@ intellij {
   version.set("2023.3.7")
   type.set("IU") // Target IDE Platform
 
-  plugins.set(listOf("JavaScript"))
+  plugins.set(listOf("JavaScript","DatabaseTools"))
   //ideaDependencyCachePath.set(file("D:\\Program Files\\JetBrains\\WebStorm 2023.3.7"))
 }
 dependencies {

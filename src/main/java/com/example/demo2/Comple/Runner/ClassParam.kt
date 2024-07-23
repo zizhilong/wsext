@@ -2,7 +2,7 @@ package com.example.demo2.Comple.Runner
 
 import com.example.demo2.Exp.PExp.Parser
 import com.example.demo2.Exp.PExp.Result
-import com.example.demo2.basedata.Load
+import com.example.demo2.extdata.Load
 import com.intellij.codeInsight.completion.CompletionParameters
 import com.intellij.codeInsight.completion.CompletionResultSet
 import com.intellij.lang.javascript.psi.JSObjectLiteralExpression

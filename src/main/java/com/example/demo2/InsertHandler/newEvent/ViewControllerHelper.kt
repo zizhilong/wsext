@@ -3,8 +3,8 @@ package com.example.demo2.InsertHandler.newEvent
 import com.example.demo2.Exp.SExp.Parser
 import com.example.demo2.Tools.JSObjectLiteralUnit
 import com.example.demo2.Tools.StringHelper.trimQuotes
-import com.example.demo2.basedata.Events
-import com.example.demo2.basedata.Extclass
+import com.example.demo2.extdata.Events
+import com.example.demo2.extdata.Extclass
 import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.lang.javascript.psi.JSObjectLiteralExpression
 import com.intellij.openapi.application.ApplicationManager

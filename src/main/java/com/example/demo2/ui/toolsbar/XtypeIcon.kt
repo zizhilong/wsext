@@ -1,0 +1,211 @@
+package com.example.demo2.ui.toolsbar
+
+import kotlinx.coroutines.Job
+import javax.swing.Icon
+import javax.swing.ImageIcon
+
+class xtypeIcon {
+    companion object {
+        private val iconMap: Map<String, Icon?> = mapOf(
+            "container" to createIcon("/icons/toolbox/common/Container.png"),
+            "button" to createIcon("/icons/toolbox/common/Button.png"),
+            "textfield" to createIcon("/icons/toolbox/common/Button.png"),
+            "radio" to createIcon("/icons/toolbox/common/Radio.png"),
+            "radiofield" to createIcon("/icons/toolbox/common/Radio.png"),
+            "radiogroup" to createIcon("/icons/toolbox/ext/Radio_Group.png"),
+            "combobox" to createIcon("/icons/toolbox/ext/ComboBox.png"),
+            "gridpanel" to createIcon("/icons/toolbox/ext/Grid_Panel.png"),
+            "label" to createIcon("/icons/toolbox/common/Label.png"),
+            "form" to  createIcon("/icons/toolbox/common/Form_Panel.png"),
+            "window" to  createIcon("/icons/toolbox/ext/Window.png"),
+            "datefield" to  createIcon("/icons/toolbox/common/Date_Field.png")
+
+        )
+
+        // 从资源文件创建 Icon
+        private fun createIcon(path: String): Icon? {
+
+            val resource = javaClass.getResource(path)
+            return if (resource != null) {
+                ImageIcon(resource)
+            } else {
+                println("Resource not found: $path")
+                null
+            }
+        }
+
+        // 获取图标的静态方法
+        fun getIcon(xtype: String): Icon? {
+            var k=xtype
+            if(reversedMap[k]!=null){
+                k=reversedMap[k]!!;
+            }
+            return iconMap[k]
+        }
+
+        fun getXtype(key: String): String? {
+            return reversedMap[key]
+        }
+    private val reversedMap: Map<String, String> = mapOf(
+        "Ext.Component" to "component",
+        "Ext.Editor" to "editor",
+        "Ext.Img" to "imagecomponent",
+        "Ext.LoadMask" to "loadmask",
+        "Ext.Progress" to "progressbarwidget",
+        "Ext.ProgressBar" to "progressbar",
+        "Ext.Widget" to "widget",
+        "Ext.button.Button" to "button",
+        "Ext.button.Cycle" to "cycle",
+        "Ext.button.Segmented" to "segmentedbutton",
+        "Ext.button.Split" to "splitbutton",
+        "Ext.calendar.panel.Panel" to "calendar",
+        "Ext.chart.CartesianChart" to "chart",
+        "Ext.chart.PolarChart" to "polar",
+        "Ext.chart.SpaceFillingChart" to "spacefilling",
+        "Ext.chart.axis.Axis" to "axis",
+        "Ext.chart.axis.Axis3D" to "axis3d",
+        "Ext.chart.interactions.Abstract" to "interaction",
+        "Ext.chart.navigator.Container" to "chartnavigator",
+        "Ext.container.ButtonGroup" to "buttongroup",
+        "Ext.container.Container" to "container",
+        "Ext.container.Viewport" to "viewport",
+        "Ext.dashboard.Dashboard" to "dashboard",
+        "Ext.draw.Container" to "draw",
+        "Ext.draw.Surface" to "surface",
+        "Ext.flash.Component" to "flash",
+        "Ext.form.CheckboxGroup" to "checkboxgroup",
+        "Ext.form.FieldContainer" to "fieldcontainer",
+        "Ext.form.FieldSet" to "fieldset",
+        "Ext.form.Label" to "label",
+        "Ext.form.Panel" to "form",
+        "Ext.form.RadioGroup" to "radiogroup",
+        "Ext.form.field.Base" to "field",
+        "Ext.form.field.Checkbox" to "checkbox",
+        "Ext.form.field.ComboBox" to "combo",
+        "Ext.form.field.Date" to "datefield",
+        "Ext.form.field.Display" to "displayfield",
+        "Ext.form.field.File" to "fileuploadfield",
+        "Ext.form.field.FileButton" to "filebutton",
+        "Ext.form.field.Hidden" to "hidden",
+        "Ext.form.field.HtmlEditor" to "htmleditor",
+        "Ext.form.field.Number" to "numberfield",
+        "Ext.form.field.Picker" to "pickerfield",
+        "Ext.form.field.Radio" to "radio",
+        "Ext.form.field.Spinner" to "spinnerfield",
+        "Ext.form.field.Tag" to "tagfield",
+        "Ext.form.field.Text" to "textfield",
+        "Ext.form.field.TextArea" to "textarea",
+        "Ext.form.field.Time" to "timefield",
+        "Ext.form.field.Trigger" to "triggerfield",
+        "Ext.froala.Editor" to "froalaeditor",
+        "Ext.froala.EditorField" to "froalaeditorfield",
+        "Ext.grid.CellEditor" to "celleditor",
+        "Ext.grid.Panel" to "grid",
+        "Ext.grid.RowEditor" to "roweditor",
+        "Ext.grid.RowEditorButtons" to "roweditorbuttons",
+        "Ext.grid.column.Action" to "actioncolumn",
+        "Ext.grid.column.Boolean" to "booleancolumn",
+        "Ext.grid.column.Check" to "checkcolumn",
+        "Ext.grid.column.Column" to "gridcolumn",
+        "Ext.grid.column.Date" to "datecolumn",
+        "Ext.grid.column.Groups" to "groupscolumn",
+        "Ext.grid.column.Number" to "numbercolumn",
+        "Ext.grid.column.RowNumberer" to "rownumberer",
+        "Ext.grid.column.Template" to "templatecolumn",
+        "Ext.grid.column.Widget" to "widgetcolumn",
+        "Ext.grid.header.Container" to "headercontainer",
+        "Ext.grid.plugin.grouping.Column" to "groupingpanelcolumn",
+        "Ext.grid.plugin.grouping.Panel" to "groupingpanel",
+        "Ext.grid.property.Grid" to "propertygrid",
+        "Ext.layout.container.ColumnSplitter" to "columnsplitter",
+        "Ext.list.Tree" to "treelist",
+        "Ext.list.TreeItem" to "treelistitem",
+        "Ext.menu.Bar" to "menubar",
+        "Ext.menu.CheckItem" to "menucheckitem",
+        "Ext.menu.ColorPicker" to "colormenu",
+        "Ext.menu.DatePicker" to "datemenu",
+        "Ext.menu.Item" to "menuitem",
+        "Ext.menu.Menu" to "menu",
+        "Ext.menu.Separator" to "menuseparator",
+        "Ext.panel.Header" to "header",
+        "Ext.panel.Panel" to "panel",
+        "Ext.panel.Table" to "tablepanel",
+        "Ext.panel.Title" to "title",
+        "Ext.panel.Tool" to "tool",
+        "Ext.picker.Color" to "colorpicker",
+        "Ext.picker.Date" to "datepicker",
+        "Ext.picker.Month" to "monthpicker",
+        "Ext.picker.Time" to "timepicker",
+        "Ext.pivot.Grid" to "pivotgrid",
+        "Ext.pivot.d3.Container" to "pivotd3container",
+        "Ext.pivot.d3.HeatMap" to "pivotheatmap",
+        "Ext.pivot.d3.TreeMap" to "pivottreemap",
+        "Ext.pivot.plugin.configurator.Column" to "pivotconfigfield",
+        "Ext.pivot.plugin.configurator.Container" to "pivotconfigcontainer",
+        "Ext.pivot.plugin.configurator.Panel" to "pivotconfigpanel",
+        "Ext.resizer.BorderSplitter" to "bordersplitter",
+        "Ext.resizer.Splitter" to "splitter",
+        "Ext.slider.Multi" to "multislider",
+        "Ext.slider.Single" to "slider",
+        "Ext.slider.Tip" to "slidertip",
+        "Ext.slider.Widget" to "sliderwidget",
+        "Ext.sparkline.Bar" to "sparklinebar",
+        "Ext.sparkline.Base" to "sparkline",
+        "Ext.sparkline.Box" to "sparklinebox",
+        "Ext.sparkline.Bullet" to "sparklinebullet",
+        "Ext.sparkline.Discrete" to "sparklinediscrete",
+        "Ext.sparkline.Line" to "sparklineline",
+        "Ext.sparkline.Pie" to "sparklinepie",
+        "Ext.sparkline.TriState" to "sparklinetristate",
+        "Ext.tab.Bar" to "tabbar",
+        "Ext.tab.Panel" to "tabpanel",
+        "Ext.tab.Tab" to "tab",
+        "Ext.tip.QuickTip" to "quicktip",
+        "Ext.tip.Tip" to "tip",
+        "Ext.tip.ToolTip" to "tooltip",
+        "Ext.toolbar.Breadcrumb" to "breadcrumb",
+        "Ext.toolbar.Fill" to "tbfill",
+        "Ext.toolbar.Item" to "tbitem",
+        "Ext.toolbar.Paging" to "pagingtoolbar",
+        "Ext.toolbar.Separator" to "tbseparator",
+        "Ext.toolbar.Spacer" to "tbspacer",
+        "Ext.toolbar.TextItem" to "tbtext",
+        "Ext.toolbar.Toolbar" to "toolbar",
+        "Ext.tree.Column" to "treecolumn",
+        "Ext.tree.Panel" to "treepanel",
+        "Ext.tree.View" to "treeview",
+        "Ext.ux.Explorer" to "explorer",
+        "Ext.ux.GMapPanel" to "gmappanel",
+        "Ext.ux.IFrame" to "uxiframe",
+        "Ext.ux.TreePicker" to "treepicker",
+        "Ext.ux.colorpick.Button" to "colorbutton",
+        "Ext.ux.colorpick.ColorMap" to "colorpickercolormap",
+        "Ext.ux.colorpick.ColorPreview" to "colorpickercolorpreview",
+        "Ext.ux.colorpick.Field" to "colorfield",
+        "Ext.ux.colorpick.Selector" to "colorselector",
+        "Ext.ux.colorpick.Slider" to "colorpickerslider",
+        "Ext.ux.colorpick.SliderAlpha" to "colorpickerslideralpha",
+        "Ext.ux.colorpick.SliderHue" to "colorpickersliderhue",
+        "Ext.ux.colorpick.SliderSaturation" to "colorpickerslidersaturation",
+        "Ext.ux.colorpick.SliderValue" to "colorpickerslidervalue",
+        "Ext.ux.desktop.Desktop" to "desktop",
+        "Ext.ux.desktop.TaskBar" to "taskbar",
+        "Ext.ux.desktop.TrayClock" to "trayclock",
+        "Ext.ux.desktop.Video" to "video",
+        "Ext.ux.desktop.Wallpaper" to "wallpaper",
+        "Ext.ux.event.RecorderManager" to "eventrecordermanager",
+        "Ext.ux.form.ItemSelector" to "itemselector",
+        "Ext.ux.form.MultiSelect" to "multiselect",
+        "Ext.ux.form.SearchField" to "searchfield",
+        "Ext.ux.gauge.Gauge" to "gauge",
+        "Ext.ux.rating.Picker" to "rating",
+        "Ext.ux.statusbar.StatusBar" to "statusbar",
+        "Ext.view.BoundList" to "boundlist",
+        "Ext.view.MultiSelector" to "multiselector",
+        "Ext.view.Table" to "tableview",
+        "Ext.view.View" to "dataview",
+        "Ext.window.MessageBox" to "messagebox",
+        "Ext.window.Toast" to "toast",
+        "Ext.window.Window" to "window")
+}
+}
