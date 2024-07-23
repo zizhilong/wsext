@@ -43,6 +43,9 @@
       <add-to-group group-id="ToolsMenu" anchor="first"/>
     </action>
       -->
+    <action id="MyPlugin.Action" class="com.example.demo2.ui.toolsbar.Test" text="My Action" description="My Action Description">
+      <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt W"/>
+    </action>
   </actions>
 
   <!-- Product and plugin compatibility requirements.
@@ -51,7 +54,9 @@
 
   <!-- Extension points defined by the plugin.
        Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
-
+  <extensions defaultExtensionNs="com.intellij">
+    <toolWindow id="TreeView" anchor="left" factoryClass="com.example.demo2.ui.toolsbar.TreeViewPlugin"/>
+  </extensions>
   <extensions defaultExtensionNs="com.intellij">
     <completion.contributor language="JavaScript" implementationClass="com.example.demo2.Comple.Contributor" order="first"/>
   </extensions>

@@ -24,11 +24,15 @@ intellij {
   //ideaDependencyCachePath.set(file("D:\\Program Files\\JetBrains\\WebStorm 2023.3.7"))
 }
 dependencies {
-  //implementation(files("D:\\Program Files\\JetBrains\\IntelliJ IDEA 2024.1.4\\plugins\\javascript-plugin\\lib\\javascript-plugin.jar"))
-  compileOnly(files("D:\\Program Files\\JetBrains\\WebStorm 2023.3.7\\plugins\\javascript-intentions\\lib\\javascript-intentions.jar"))
+
+  //compileOnly(files("D:\\Program Files\\JetBrains\\WebStorm 2023.3.7\\plugins\\javascript-intentions\\lib\\javascript-intentions.jar"))
+  compileOnly(files("E:\\WebStorm 2023.3.7\\plugins\\javascript-intentions\\lib\\javascript-intentions.jar"))
   implementation("com.fasterxml.jackson.core:jackson-databind:2.12.3")
   implementation("com.fasterxml.jackson.core:jackson-core:2.12.3")
   implementation("com.fasterxml.jackson.core:jackson-annotations:2.12.3")
+  implementation("io.javalin:javalin:6.1.6")
+
+  implementation("org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:1.8.21")
 }
 tasks {
   // Set the JVM compatibility versions
@@ -42,7 +46,8 @@ tasks {
   }
   runIde {
     // 指定 WebStorm 的安装目录
-    ideDir.set(file("D:\\Program Files\\JetBrains\\WebStorm 2023.3.7"))
+    //ideDir.set(file("D:\\Program Files\\JetBrains\\WebStorm 2023.3.7"))
+    ideDir.set(file("E:\\WebStorm 2023.3.7"))
   }
   patchPluginXml {
     sinceBuild.set("233")
