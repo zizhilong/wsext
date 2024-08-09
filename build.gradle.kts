@@ -17,16 +17,18 @@ repositories {
 // Configure Gradle IntelliJ Plugin
 // Read more: https://plugins.jetbrains.com/docs/intellij/tools-gradle-intellij-plugin.html
 intellij {
-  version.set("2023.3.7")
+  version.set("2024.1.5")
   type.set("IU") // Target IDE Platform
 
   plugins.set(listOf("JavaScript","DatabaseTools"))
-  //ideaDependencyCachePath.set(file("D:\\Program Files\\JetBrains\\WebStorm 2023.3.7"))
+
+  //ideaDependencyCachePath.set("E:\\Program Files\\JetBrains\\WebStorm 2024.1.5.3")
 }
 dependencies {
 
   //compileOnly(files("D:\\Program Files\\JetBrains\\WebStorm 2023.3.7\\plugins\\javascript-intentions\\lib\\javascript-intentions.jar"))
-  compileOnly(files("E:\\WebStorm 2023.3.7\\plugins\\javascript-intentions\\lib\\javascript-intentions.jar"))
+  compileOnly(files("E:\\Program Files\\JetBrains\\WebStorm 2024.1.5\\plugins\\javascript-debugger\\lib\\javascript-debugger.jar"))
+  compileOnly(files("E:\\Program Files\\JetBrains\\WebStorm 2024.1.5\\plugins\\javascript-intentions\\lib\\javascript-intentions.jar"))
   implementation("com.fasterxml.jackson.core:jackson-databind:2.12.3")
   implementation("com.fasterxml.jackson.core:jackson-core:2.12.3")
   implementation("com.fasterxml.jackson.core:jackson-annotations:2.12.3")
@@ -47,7 +49,7 @@ tasks {
   runIde {
     // 指定 WebStorm 的安装目录
     //ideDir.set(file("D:\\Program Files\\JetBrains\\WebStorm 2023.3.7"))
-    ideDir.set(file("E:\\WebStorm 2023.3.7"))
+    ideDir.set(file("E:\\Program Files\\JetBrains\\WebStorm 2024.1.5"))
   }
   patchPluginXml {
     sinceBuild.set("233")

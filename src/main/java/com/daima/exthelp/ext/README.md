@@ -1,0 +1,2 @@
+extclass是跟类有关的定义
+ns目录处理类名到PSIFILE的转换

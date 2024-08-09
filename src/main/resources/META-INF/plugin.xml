@@ -2,7 +2,7 @@
 <idea-plugin>
 
   <!-- Unique identifier of the plugin. It should be FQN. It cannot be changed between the plugin versions. -->
-  <id>com.example.demo2</id>
+  <id>com..demo2</id>
 
   <!-- Public plugin name should be written in Title Case.
        Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-name -->
@@ -19,7 +19,6 @@
   <depends>com.intellij.modules.lang</depends>
   <depends>com.intellij.modules.platform</depends>
   <depends>JavaScript</depends>
-  <depends>com.intellij.database</depends>
 
   <actions>
     <!--
@@ -27,12 +26,17 @@
         <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt J"/>
         <add-to-group group-id="ToolsMenu" anchor="first"/>
     </action>
-    <action id="com.yourname.jsopener.OpenInBrowserAction" class="com.example.demo2.OpenInBrowserAction" text="Open in Browser">
+    <action id="com.yourname.jsopener.OpenInBrowserAction" class="com.daima.exthelp.keyhelp.DocAction" text="Open in Browser">
     -->
-
-    <action id="com.yourname.jsopener.OpenInBrowserAction" class="com.example.demo2.OpenInBrowserAction" text="Open in Browser">
+    <!--CTRF+D打开手册-->
+    <action id="com.yourname.jsopener.OpenInBrowserAction" class="com.daima.exthelp.keyhelp.DocAction" text="Open in Browser">
       <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt D"/>
-      <add-to-group group-id="EditorPopupMenu" anchor="last" />
+    </action>
+    <action class="com.daima.exthelp.ext.RunAction" text="Open in Browser">
+      <keyboard-shortcut keymap="$default" first-keystroke="F7"/>
+    </action>
+    <action class="com.daima.exthelp.ext.FindPsiAction" text="Open in Browser">
+      <keyboard-shortcut keymap="$default" first-keystroke="F8"/>
     </action>
     <!--
     <action id="ListJavaScriptPsi" class="com.example.demo2.ListJavaScriptPsiAction" text="List JavaScript PSI">
@@ -44,11 +48,10 @@
       <add-to-group group-id="ToolsMenu" anchor="first"/>
     </action>
       -->
-    <action id="MyPlugin.Action" class="com.example.demo2.ui.toolsbar.Test" text="My Action" description="My Action Description">
+    <action id="MyPlugin.Action" class="com.daima.exthelp.jsdebug.MyProjectComponent" text="My Action" description="My Action Description">
       <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt W"/>
     </action>
   </actions>
-
   <!-- Product and plugin compatibility requirements.
        Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
   <depends>com.intellij.modules.platform</depends>
@@ -56,9 +59,22 @@
   <!-- Extension points defined by the plugin.
        Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
   <extensions defaultExtensionNs="com.intellij">
-    <toolWindow id="TreeView" anchor="left" factoryClass="com.example.demo2.ui.toolsbar.TreeViewPlugin"/>
+    <completion.contributor language="JavaScript" implementationClass="com.daima.exthelp.Comple.Contributor" order="first"/>
   </extensions>
   <extensions defaultExtensionNs="com.intellij">
-    <completion.contributor language="JavaScript" implementationClass="com.example.demo2.Comple.Contributor" order="first"/>
+    <!--<configurationType  implementation="com.example.demo2.rundebugplugin.MyConfigurationType"/>-->
+    <!--<localInspection language="JavaScript" shortName="MyCodeInspection" displayName="Inspection" groupName="MyInspections" enabledByDefault="true" implementationClass="com.example.demo2.Inspection.ComparingStringReferencesInspection"/>-->
   </extensions>
+  <!--
+  <extensions defaultExtensionNs="com.intellij">
+    <postStartupActivity   implementation="com.daima.exthelp.jsdebug.MyStartupActivity"/>
+  </extensions>
+  -->
+
+  <project-components>
+    <component>
+      <implementation-class>com.daima.exthelp.api.MyHttpListener</implementation-class>
+    </component>
+  </project-components>
+
 </idea-plugin>
