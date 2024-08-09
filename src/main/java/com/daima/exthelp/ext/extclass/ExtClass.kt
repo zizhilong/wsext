@@ -10,7 +10,9 @@ class ExtClass(
     private val parentClass: ClassInterface<Any>? = null, // 可选的父类
     private val functions: List<ExtFunction> = listOf() // 函数列表
 ) : ClassInterface<Any> {
+    init{
 
+    }
     // 获取父类接口实例，可能为空
     override fun getParent(): ClassInterface<Any>? {
         return parentClass

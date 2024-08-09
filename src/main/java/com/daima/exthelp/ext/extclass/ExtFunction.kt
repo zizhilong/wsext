@@ -10,5 +10,6 @@ data class FunctionParameter(
 // 定义一个函数类型的类
 data class ExtFunction(
     val name: String,
+    val text: String,
     val parameters: List<FunctionParameter>
 )

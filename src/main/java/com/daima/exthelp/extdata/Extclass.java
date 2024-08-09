@@ -180,8 +180,6 @@ public class Extclass {
                     k -> new ArrayList<>()
             ).add(element);
         }
-
-
         for (Map.Entry<Character, List<LookupElementBuilder>> entry : groupedLookupElements.entrySet()) {
             Character key = entry.getKey();
             List<LookupElementBuilder> value = entry.getValue();
@@ -218,7 +216,22 @@ public class Extclass {
     public List<Methods> getMethods() {
         return methods;
     }
+    public List<Methods> getAllMethods() {
+        // 使用 LinkedHashSet 保持插入顺序且不重复
+        Set<Methods> allMethods = new LinkedHashSet<>(methods);
 
+        // 获取所有父类和混入类
+        List<String> classList = getAllMixinsAndSuperClasses(this);
+        for (String className : classList) {
+            Extclass superClass = Load.getInstance().getExtclassByName(className);
+            if (superClass != null) {
+                // 将父类和混入类的方法添加到集合中
+                allMethods.addAll(superClass.methods);
+            }
+        }
+
+        return new ArrayList<>(allMethods);
+    }
     public List<Events> getEvents() {
         return events;
     }

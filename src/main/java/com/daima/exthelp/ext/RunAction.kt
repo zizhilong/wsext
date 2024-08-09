@@ -1,6 +1,5 @@
 package com.daima.exthelp.ext
 
-import com.daima.exthelp.ext.extclass.ParserFile
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.fileEditor.FileEditorManager
@@ -13,10 +12,9 @@ import com.intellij.openapi.ui.Messages
 
 class RunAction : AnAction() {
     override fun actionPerformed(event: AnActionEvent) {
+
         val project: Project? = event.project
         if (project != null) {
-            //Class2Psi("Mz.newrecord.Newrecord",project)
-            //return
             val fileEditorManager = FileEditorManager.getInstance(project)
             val virtualFile: VirtualFile? = fileEditorManager.selectedFiles.firstOrNull()
 
@@ -35,7 +33,7 @@ class RunAction : AnAction() {
     }
 
     private fun createExtFileParser(jsFile: JSFile) {
-        val parser = ParserFile()
-        parser.parseFile(jsFile)
+        //val parser = ParserFile()
+        //parser.parseFile(jsFile)
     }
 }
