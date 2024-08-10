@@ -119,16 +119,17 @@ class ViewControllerHelper(private val project: Project, clsName: String) {
         docstr ="/**\n"
         docstr+=" * "+evt.html.replace("\n","")+"\n"
         docstr+=" * \n"
-
-        for ( param in evt.params) {
-            //param.name
-            if(parastr.isNotEmpty()){
-                parastr+=", "
+        if(evt.params!=null) {
+            for (param in evt.params!!) {
+                //param.name
+                if (parastr.isNotEmpty()) {
+                    parastr += ", "
+                }
+                var desc = param.text
+                desc = desc.replace("\n", "")
+                docstr += " * @param {${param.valueType}} ${param.name} - $desc\n";
+                parastr += param.name;
             }
-            var desc=param.text
-            desc=desc.replace("\n","")
-            docstr+=" * @param {${param.valueType}} ${param.name} - $desc\n";
-            parastr+=param.name;
         }
         docstr+=" */\n"
          var funstr="function ($parastr) {\n"

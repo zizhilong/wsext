@@ -28,9 +28,8 @@ class ExtBaseClass(
     override fun getFunctions(): List<ExtFunction> {
         // 如果函数列表为空，进行初始化
         if (functions == null) {
-            val loadInstance = Load.getInstance()
-            val extclass = loadInstance.getExtclassByName(className)
-
+            val extclass = Load.getExtclassByName(className)
+            /*
             // 构建函数列表
             functions = extclass?.allMethods?.map { method ->
                 ExtFunction(
@@ -44,6 +43,7 @@ class ExtBaseClass(
                     }
                 )
             } ?: listOf() // 如果 extclass 为 null，则返回空列表
+             */
         }
         return functions ?: listOf()
     }

@@ -1,5 +1,4 @@
 package com.daima.exthelp.Comple
-import com.daima.exthelp.Comple.Runner.ClassParam
 import com.daima.exthelp.Comple.Runner.CompleRunner
 import com.intellij.codeInsight.completion.CompletionParameters
 import com.intellij.codeInsight.completion.CompletionProvider

@@ -105,8 +105,7 @@ class ExtViewItemClass(
         val obj = Parser("LREO").RunExp(psiElement)
         //如果属于属性设定
         if(obj!=null){
-            val loadInstance = Load.getInstance()
-            val extclass = loadInstance.getExtclassByName(this.getXtypeName()) ?: return listOf()
+            val extclass = Load.getExtclassByName(this.getXtypeName()) ?: return listOf()
             var list= extclass.getLookupElementsByPrefix(this.getPrefix(psiElement), context)
             Array(list.size) { index ->
                 lookupElements.add(list[index])
