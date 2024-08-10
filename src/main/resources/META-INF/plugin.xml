@@ -59,7 +59,7 @@
   <!-- Extension points defined by the plugin.
        Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
   <extensions defaultExtensionNs="com.intellij">
-    <completion.contributor language="JavaScript" implementationClass="com.daima.exthelp.Comple.Contributor" order="first"/>
+    <completion.contributor language="JavaScript" implementationClass="com.daima.exthelp.ext.comple.Contributor" order="first"/>
   </extensions>
   <extensions defaultExtensionNs="com.intellij">
     <!--<configurationType  implementation="com.example.demo2.rundebugplugin.MyConfigurationType"/>-->

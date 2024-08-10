@@ -1,7 +1,7 @@
 package com.daima.exthelp.ext.extclass
 
+import com.daima.exthelp.ext.interfaces.ClassInterface
 import com.daima.exthelp.extdata.Load
-import com.daima.exthelp.extdata.Methods
 
 // 定义一个用于描述 Ext. 开头基类信息的类
 class ExtBaseClass(
@@ -20,7 +20,10 @@ class ExtBaseClass(
     override fun getClassName(): String {
         return className
     }
-
+    //需要对当前页面进行PSI渲染
+    override fun renderPage(){
+        return
+    }
     // 获取函数列表，延迟初始化
     override fun getFunctions(): List<ExtFunction> {
         // 如果函数列表为空，进行初始化

@@ -1,14 +1,12 @@
 package com.daima.exthelp.Comple
 import com.daima.exthelp.Comple.Runner.ClassParam
 import com.daima.exthelp.Comple.Runner.CompleRunner
-import com.daima.exthelp.Comple.Runner.Xtype
 import com.intellij.codeInsight.completion.CompletionParameters
 import com.intellij.codeInsight.completion.CompletionProvider
 import com.intellij.codeInsight.completion.CompletionResultSet
 import com.intellij.util.ProcessingContext
 
 class Provider : CompletionProvider<CompletionParameters>() {
-    private val runners: List<CompleRunner> = listOf(ClassParam(),Xtype())
     // To add Xtype, uncomment the next line and add Xtype() to the list
     // runners = listOf(ClassParam(), Xtype())
 
@@ -17,10 +15,6 @@ class Provider : CompletionProvider<CompletionParameters>() {
         context: ProcessingContext,
         result: CompletionResultSet
     ) {
-        for (instance in runners) {
-            if (instance.addCompletions(parameters, context, result)) {
-                return
-            }
-        }
+
     }
 }

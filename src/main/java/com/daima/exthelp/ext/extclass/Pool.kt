@@ -1,8 +1,8 @@
-import com.daima.exthelp.ext.extclass.ClassInterface
+import com.daima.exthelp.ext.interfaces.ClassInterface
 import com.daima.exthelp.ext.extclass.ExtBaseClass
-import com.daima.exthelp.ext.extclass.ExtClass
 import com.daima.exthelp.ext.extclass.parseFile
 import com.daima.exthelp.ext.ns.Class2Psi
+import com.intellij.lang.javascript.psi.JSFile
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiFile
 
@@ -45,7 +45,7 @@ object Pool {
             }
         } else {
             // 否则，正常使用 Class2Psi 和 parseFile 创建实例
-            val psiFile: PsiFile? = Class2Psi(className, project)
+            val psiFile: JSFile? = Class2Psi(className, project)
             if (psiFile != null) {
                 val ret = parseFile(psiFile)
                 if (ret != null) {

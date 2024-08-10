@@ -1,10 +1,8 @@
-package com.daima.exthelp.Comple.Runner
+package com.daima.exthelp.ext.interfaces
 
-import com.intellij.openapi.diagnostic.Logger
 import com.intellij.psi.PsiElement
 
-open class CompleBase {
-
+class CodeHelpBase {
     protected fun getPrefix(position: PsiElement, offset: Int): Char {
         val text = position.containingFile.text
         var i = offset - 1

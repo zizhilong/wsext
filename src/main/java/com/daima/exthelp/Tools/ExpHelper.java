@@ -100,7 +100,7 @@ public class ExpHelper {
         }
     }
 
-    private static String getContentPreview(PsiElement psi, int byteLimit) {
+    public static String getContentPreview(PsiElement psi, int byteLimit) {
         String text = psi.getText();
         // 转换为字节数组并截取前 byteLimit 个字节
         byte[] textBytes = text.getBytes(StandardCharsets.UTF_8);

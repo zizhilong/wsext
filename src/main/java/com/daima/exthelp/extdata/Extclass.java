@@ -42,6 +42,7 @@ public class Extclass {
     private Map<Character,LookupElementBuilder[]> lookupElementsByPrefix ;
     private static final Key<String> IS_EVENT = new Key<>("IS_EVENT");
     public static final Key<Events> EVENTDATA = new Key<>("EVENTDATA");
+    public static final Key<Integer> TYPE = new Key<>("TYPE");
 
     public Extclass() {
         this.name = null;
@@ -136,11 +137,10 @@ public class Extclass {
                 //LookupElementBuilder builder = LookupElementBuilder.create(prop.getName())
                 continue;
             }
-            lookupElements.add(
-                    LookupElementBuilder.create(method.getName())
-                            .withTypeText("Method")
-                            .withIcon(AllIcons.Nodes.Method)
-            );
+            LookupElementBuilder e =LookupElementBuilder.create(method.getName())
+                    .withTypeText("Method")
+                    .withIcon(AllIcons.Nodes.Method);
+            lookupElements.add(e);
         }
 
         // 添加事件
@@ -150,14 +150,10 @@ public class Extclass {
             }
             LookupElementBuilder e =LookupElementBuilder.create(evt.getName())
                     .withTypeText("Event")
-                    .withIcon(AllIcons.Actions.Lightning)
-                    .withInsertHandler(new InsertEvent.InlineInsertHandler());
+                    .withIcon(AllIcons.Actions.Lightning);
             e.putUserData(IS_EVENT,"");
             e.putUserData(EVENTDATA,evt);
-
-            ;
             lookupElements.add(e);
-
         }
         return lookupElements;
     }

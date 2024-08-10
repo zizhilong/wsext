@@ -1,4 +1,6 @@
-package com.daima.exthelp.ext.extclass
+package com.daima.exthelp.ext.interfaces
+
+import com.daima.exthelp.ext.extclass.ExtFunction
 
 
 // 定义 ClassInterface 接口
@@ -11,4 +13,6 @@ interface ClassInterface<T> {
 
     // 获取函数数组
     fun getFunctions(): List<ExtFunction>
+    //需要对当前页面进行PSI渲染
+    fun renderPage()
 }

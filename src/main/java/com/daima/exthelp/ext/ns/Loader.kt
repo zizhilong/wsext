@@ -2,6 +2,7 @@ package com.daima.exthelp.ext.ns
 
 import com.daima.exthelp.Exp.SExp.Parser
 import com.daima.exthelp.Tools.StringHelper
+import com.intellij.lang.javascript.psi.JSFile
 import com.intellij.lang.javascript.psi.JSObjectLiteralExpression
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.LocalFileSystem
@@ -11,7 +12,7 @@ import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiManager
 
 // 用于存储命名空间名称到 PsiElement 的映射
-val namespaceToPsiElementMap: MutableMap<String, PsiFile> = mutableMapOf()
+val namespaceToPsiElementMap: MutableMap<String, JSFile> = mutableMapOf()
 
 // 用于存储顶级命名空间到其目录路径的映射
 val namespacePathsMap: MutableMap<String, String> = mutableMapOf()
@@ -56,7 +57,7 @@ fun loadNamespacePaths(project: Project) {
 }
 
 // 根据完全限定名称查找或创建 PsiFile 的函数
-fun Class2Psi(name: String, project: Project): PsiFile? {
+fun Class2Psi(name: String, project: Project): JSFile? {
     loadNamespacePaths(project)
     // 检查 PsiFile 是否已在映射中
     namespaceToPsiElementMap[name]?.let {
@@ -80,7 +81,7 @@ fun Class2Psi(name: String, project: Project): PsiFile? {
 }
 
 // 用于根据基础目录和路径查找 PsiFile 的函数
-fun findPsiFileForNamespace(baseDir: String, path: String, project: Project): PsiFile? {
+fun findPsiFileForNamespace(baseDir: String, path: String, project: Project): JSFile? {
     // 获取项目根目录
     val projectBaseDir = project.basePath ?: return null
 
@@ -91,7 +92,14 @@ fun findPsiFileForNamespace(baseDir: String, path: String, project: Project): Ps
     val virtualFile = LocalFileSystem.getInstance().findFileByPath(filePath) ?: return null
 
     // 使用 PsiManager 从 VirtualFile 获取 PsiFile
-    return PsiManager.getInstance(project).findFile(virtualFile)
+    val psiFile: PsiFile? = PsiManager.getInstance(project).findFile(virtualFile)
+
+    // 检查 psiFile 是否为 JSFile 类型
+    return if (psiFile is JSFile) {
+        psiFile
+    } else {
+        null
+    }
 }
 
 // 加载器函数的示例，用于设置路径

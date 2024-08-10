@@ -1,4 +1,7 @@
 package com.daima.exthelp.ext.extclass
+
+import com.daima.exthelp.ext.interfaces.ClassInterface
+
 //用于函数定义
 
 // 定义一个函数参数的类

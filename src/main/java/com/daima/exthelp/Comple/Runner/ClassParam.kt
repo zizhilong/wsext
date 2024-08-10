@@ -12,7 +12,6 @@ import com.intellij.util.ProcessingContext
 import org.jetbrains.annotations.NotNull
 
 class ClassParam : CompleBase(), CompleRunner {
-    private val LOG: Logger = Logger.getInstance(Xtype::class.java)
     private val xtypeParser: Parser = Parser("REO{haveattr xtype}")
 
     override fun addCompletions(
