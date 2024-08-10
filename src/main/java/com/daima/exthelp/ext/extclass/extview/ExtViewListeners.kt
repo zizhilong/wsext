@@ -35,8 +35,8 @@ class ExtViewListeners (
         //创建事件
         if(obj!=null&&obj.lastPsi===jsObject) {
             val extclass = Load.getExtclassByName(className) ?: return listOf()
-            var list= extclass.getLookupElementsByPrefix(this.getPrefix(psiElement), context)
-
+            var list= extclass.getLookupElementsByPrefix(this.getPrefix(psiElement),"Event")
+            return list
 
 
         }

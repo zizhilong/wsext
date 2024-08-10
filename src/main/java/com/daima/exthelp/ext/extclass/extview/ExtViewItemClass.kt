@@ -64,7 +64,16 @@ class ExtViewItemClass(
         var listeners=this.getObjProperty(jsObject,"listeners")
         if (listeners?.value is JSObjectLiteralExpression) {
             var listenerobj=listeners.value as JSObjectLiteralExpression
-            ExtViewListeners(listenerobj,this.getXtypeName())
+            var xtype=this.getXtypeName()
+            if(xtype==""){
+                val xtypeProperty=jsObject.findProperty("extend")
+                val classname = xtypeProperty?.value?.text
+                if (classname != null) {
+                    xtype=classname
+                }
+            }
+
+            ExtViewListeners(listenerobj,xtype)
         }
     }
     // 获取所有子项
@@ -106,11 +115,7 @@ class ExtViewItemClass(
         //如果属于属性设定
         if(obj!=null){
             val extclass = Load.getExtclassByName(this.getXtypeName()) ?: return listOf()
-            var list= extclass.getLookupElementsByPrefix(this.getPrefix(psiElement), context)
-            Array(list.size) { index ->
-                lookupElements.add(list[index])
-            }
-            return lookupElements
+            return extclass.getLookupElementsByPrefix(this.getPrefix(psiElement),"Config")
         }
         return listOf()
     }
