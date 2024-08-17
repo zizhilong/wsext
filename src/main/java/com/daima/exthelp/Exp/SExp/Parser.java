@@ -38,7 +38,6 @@ public class Parser {
             LOG.info("SExp Run "+ens.Type);
             //循环所有下级
             boolean isfind=false;
-
             for(PsiElement child:psi.getChildren()){
                 //如果命中
                 if(ens.Run(child,debug)){

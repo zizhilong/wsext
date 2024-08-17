@@ -1,7 +1,10 @@
 import com.daima.exthelp.ext.interfaces.ClassInterface
 import com.daima.exthelp.ext.extclass.ExtBaseClass
-import com.daima.exthelp.ext.extclass.parseFile
+import com.daima.exthelp.ext.extclass.ParseFile
 import com.daima.exthelp.ext.ns.Class2Psi
+import com.daima.exthelp.extdata.Load
+import com.daima.exthelp.extdata.Load.getExtclassByName
+import com.daima.exthelp.extdata.Load.xtypeMap
 import com.intellij.lang.javascript.psi.JSFile
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiFile
@@ -31,11 +34,12 @@ object Pool {
     // 根据类名查找对象，找不到时尝试创建
     fun <T> findByClassName(project: Project, className: String): ClassInterface<T>? {
         val instance = classInstances.find { it.getClassName() == className }
-        if (instance != null) {
+        if (instance != null && false) {
             @Suppress("UNCHECKED_CAST")
             return instance as ClassInterface<T>
         }
-
+        //尝试XTYPE转义
+        val className = xtypeMap[className] ?: className
         // 如果 className 以 "Ext" 开头，调用 PoolLoadExtBase
         if (className.startsWith("Ext")) {
             val extInstance = PoolLoadExtBase<T>(className)
@@ -47,7 +51,7 @@ object Pool {
             // 否则，正常使用 Class2Psi 和 parseFile 创建实例
             val psiFile: JSFile? = Class2Psi(className, project)
             if (psiFile != null) {
-                val ret = parseFile(psiFile)
+                val ret = ParseFile.parseFile(psiFile)
                 if (ret != null) {
                     addInstance(ret)
                     return ret as ClassInterface<T>
@@ -62,9 +66,8 @@ object Pool {
         // 这里可以定义如何创建 Ext 开头的类名的实例
         // 例如，假设我们创建一个示例 ExtClass
         // 创建 ExtClass 对象
+
         val extClass = ExtBaseClass(className);
         return extClass as? ClassInterface<T>
-
-
     }
 }

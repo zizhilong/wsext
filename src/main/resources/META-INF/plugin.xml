@@ -2,7 +2,7 @@
 <idea-plugin>
 
   <!-- Unique identifier of the plugin. It should be FQN. It cannot be changed between the plugin versions. -->
-  <id>com..demo2</id>
+  <id>daimaext</id>
 
   <!-- Public plugin name should be written in Title Case.
        Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-name -->
@@ -14,7 +14,15 @@
   <!-- Description of the plugin displayed on the Plugin Page and IDE Plugin Manager.
        Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
        Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
-  <description>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</description>
+  <description>
+    1.ctrl+D 打开手册
+    2.F7 切换控制器与View文件
+    3.xtype代码自动提示
+    4.代码作用域提示
+    5.Ext.函数提示
+    6.Dbm提示
+
+  </description>
   <!-- Dependencies -->
   <depends>com.intellij.modules.lang</depends>
   <depends>com.intellij.modules.platform</depends>
@@ -32,7 +40,7 @@
     <action id="com.yourname.jsopener.OpenInBrowserAction" class="com.daima.exthelp.keyhelp.DocAction" text="Open in Browser">
       <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt D"/>
     </action>
-    <action class="com.daima.exthelp.ext.RunAction" text="Open in Browser">
+    <action class="com.daima.exthelp.keyhelp.ViewConSwitchAction" text="Open in Browser">
       <keyboard-shortcut keymap="$default" first-keystroke="F7"/>
     </action>
     <action class="com.daima.exthelp.ext.FindPsiAction" text="Open in Browser">

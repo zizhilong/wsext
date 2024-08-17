@@ -1,12 +1,20 @@
 package com.daima.exthelp.Tools;
 
 import com.intellij.lang.ecmascript6.psi.impl.ES6PropertyImpl;
+import com.intellij.lang.javascript.psi.JSCallExpression;
+import com.intellij.lang.javascript.psi.JSExpressionStatement;
+import com.intellij.lang.javascript.psi.JSProperty;
+import com.intellij.lang.javascript.psi.JSReferenceExpression;
+import com.intellij.lang.javascript.psi.impl.JSExpressionStatementImpl;
 import com.intellij.lang.javascript.psi.impl.JSObjectLiteralExpressionImpl;
 import com.intellij.lang.javascript.psi.impl.JSPropertyImpl;
+import com.intellij.lang.javascript.psi.impl.JSReferenceExpressionImpl;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.PsiElement;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ExpHelper {
     public static final String SPECIFIC_CHARACTERS = "^DNVPCROAYTIJWBGLESFa.W";
@@ -83,6 +91,23 @@ public class ExpHelper {
         }
         return true;
     }
+    public static boolean R(JSReferenceExpressionImpl obj, String[] where) {
+        switch (where[0]) {
+            case "name": // 是否包含某个属性
+                String name = obj.getName();
+                return name.equals(where[1]);
+        }
+        return true;
+    }
+    public static boolean S(JSExpressionStatementImpl obj, String[] where) {
+        switch (where[0]) {
+            case "name": // 是否包含某个属性
+                //String name = obj.getName();
+                String val=getReferenceNameFromExpressionStatement(obj);
+                return val.equals(where[1]);
+        }
+        return true;
+    }
 
     // 新方法，用于向上迭代并输出每层级的简写符号和完整类名
     public static void logPsiHierarchy(PsiElement psi) {
@@ -107,5 +132,49 @@ public class ExpHelper {
         int length = Math.min(textBytes.length, byteLimit);
         // 将截取的字节数组转换回字符串
         return new String(textBytes, 0, length, StandardCharsets.UTF_8);
+    }
+
+
+
+    public static String getFullReferenceName(PsiElement expression) {
+        List<String> references = new ArrayList<>();
+
+        // 递归遍历表达式树以提取引用名称
+        collectReferences(expression, references);
+
+        if (!references.isEmpty()) {
+            return String.join(".", references);
+        }
+        return null;
+    }
+
+    private static void collectReferences(PsiElement element, List<String> references) {
+        if (element instanceof JSReferenceExpression) {
+            JSReferenceExpression referenceExpression = (JSReferenceExpression) element;
+            PsiElement qualifier = referenceExpression.getQualifier();
+            if (qualifier != null) {
+                collectReferences(qualifier, references);
+            }
+
+            // 检查是否为 "this"
+            String referenceText = referenceExpression.getText();
+            if ("this".equals(referenceText)) {
+                references.add("this");
+            } else {
+                String referenceName = referenceExpression.getReferenceName();
+                if (referenceName != null) {
+                    references.add(referenceName);
+                }
+            }
+        } else if (element instanceof JSCallExpression) {
+            JSCallExpression callExpression = (JSCallExpression) element;
+            collectReferences(callExpression.getMethodExpression(), references);
+        } else if (element instanceof JSProperty) {
+            collectReferences(element.getParent(), references);
+        }
+    }
+
+    public static String getReferenceNameFromExpressionStatement(JSExpressionStatement statement) {
+        return getFullReferenceName(statement.getExpression());
     }
 }

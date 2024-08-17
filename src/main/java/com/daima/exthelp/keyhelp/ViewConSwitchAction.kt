@@ -20,8 +20,8 @@ class ViewConSwitchAction : AnAction() {
 
             // Determine the target file to switch to
             val targetFileName = when {
-                currentFileName.endsWith("Vc.js") -> currentFileName.removeSuffix("Vc.js") + ".js"
-                currentFileName.endsWith(".js") -> currentFileName.removeSuffix(".js") + "Vc.js"
+                currentFileName.endsWith("VC.js") -> currentFileName.removeSuffix("VC.js") + ".js"
+                currentFileName.endsWith(".js") -> currentFileName.removeSuffix(".js") + "VC.js"
                 else -> return // If not a JS file, do nothing
             }
 

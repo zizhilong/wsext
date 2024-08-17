@@ -1,7 +1,7 @@
 package com.daima.exthelp.ext
 
 import com.daima.exthelp.ext.extclass.ExtClass
-import com.daima.exthelp.ext.extclass.parseFile
+import com.daima.exthelp.ext.extclass.ParseFile
 import com.daima.exthelp.ext.interfaces.CODE_HELP_KEY
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
@@ -40,7 +40,7 @@ class RunAction : AnAction() {
 
     private fun createExtFileParser(jsFile: JSFile) {
 
-        val obj= parseFile(jsFile)
+        val obj= ParseFile.parseFile(jsFile)
         if(obj is ExtClass){
             //obj.getThisPublicFunctions()
             WriteCommandAction.runWriteCommandAction(jsFile.project) {

@@ -1,8 +1,11 @@
 package com.daima.exthelp.Exp.SExp;
 
 import com.daima.exthelp.Tools.ExpHelper;
+import com.intellij.lang.javascript.psi.JSExpressionStatement;
+import com.intellij.lang.javascript.psi.impl.JSExpressionStatementImpl;
 import com.intellij.lang.javascript.psi.impl.JSObjectLiteralExpressionImpl;
 import com.intellij.lang.javascript.psi.impl.JSPropertyImpl;
+import com.intellij.lang.javascript.psi.impl.JSReferenceExpressionImpl;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.PsiElement;
 
@@ -82,9 +85,14 @@ class Struct {
                 case "O":
                     ret= ExpHelper.O((JSObjectLiteralExpressionImpl) psi,whereargs);
                     break;
+                case "S":
+                    ret= ExpHelper.S((JSExpressionStatementImpl) psi,whereargs);
+                    break;
                 case "Y":
                     ret= ExpHelper.Y((JSPropertyImpl) psi,whereargs);
                     break;
+                case "R":
+                    ret= ExpHelper.R((JSReferenceExpressionImpl) psi,whereargs);
                 default:
                     LOG.warn("SExp NOT WHERE TYPE");
             }

@@ -3,18 +3,21 @@ package com.daima.exthelp.ext.extclass
 import com.daima.exthelp.ext.interfaces.ClassInterface
 
 // 上下文类，包含一个 Map，以 String 为键，ClassInterface<T> 为值
-class Context<T> {
+class Context {
 
     // 使用 String 为键，ClassInterface<T> 为值的 Map
-    private val classMap: MutableMap<String, ClassInterface<T>> = mutableMapOf()
+    private val classMap: MutableMap<String, ClassInterface<*>> = mutableMapOf()
+
+    // 可选的 ClassInterface 列表
+    private val optionalClassList: MutableList<ClassInterface<Any>?> = mutableListOf()
 
     // 添加一个类到上下文中
-    fun addClass(name: String, classInterface: ClassInterface<T>) {
+    fun addClass(name: String, classInterface: ClassInterface<*>) {
         classMap[name] = classInterface
     }
 
     // 根据名称获取类
-    fun getClass(name: String): ClassInterface<T>? {
+    fun getClass(name: String): ClassInterface<*>? {
         return classMap[name]
     }
 
@@ -28,8 +31,18 @@ class Context<T> {
         return classMap.containsKey(name)
     }
 
+    // 添加一个 ClassInterface 到列表
+    fun addOptionalClass(classInterface: ClassInterface<Any>?) {
+        optionalClassList.add(classInterface)
+    }
+
+    // 获取可选的 ClassInterface 列表
+    fun getOptionalClassList(): List<ClassInterface<Any>?> {
+        return optionalClassList
+    }
+
     // 输出上下文的内容
     override fun toString(): String {
-        return classMap.toString()
+        return "classMap=$classMap, optionalClassList=$optionalClassList"
     }
 }

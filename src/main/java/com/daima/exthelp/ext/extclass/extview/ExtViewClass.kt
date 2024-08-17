@@ -8,15 +8,19 @@ import com.intellij.lang.javascript.psi.JSObjectLiteralExpression
 
 // 继承 ExtClass
 class ExtViewClass(
-    className: String,
+    val viewClassName: String,
     jsObject: JSObjectLiteralExpression,
     parentClass: ClassInterface<Any>? = null, // 可选的父类
     functions: List<ExtFunction> = listOf()   // 函数列表
-) : ExtClass(className, jsObject, parentClass, functions) {
+) : ExtClass(viewClassName, jsObject, parentClass, functions) {
     public var extViewItem: ExtViewItemClass? = null
     //渲染当前view
     override fun renderPage() {
-        extViewItem = ExtViewItemClass(jsObject)
+        super.renderPage()
+        extViewItem = ExtViewItemClass(jsObject,this.getBaseName())
+
+
+        //val exp = Parser("SCR{value define}R{value Ext}<<a")
     }
     // 添加特定于 ExtViewClass 的属性或方法
     fun GetjsObject():JSObjectLiteralExpression {

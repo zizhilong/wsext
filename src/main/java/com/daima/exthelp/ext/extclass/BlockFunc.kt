@@ -4,7 +4,7 @@ import com.intellij.lang.javascript.psi.JSFunctionExpression
 
 // 定义 BlockFunc 类
 data class BlockFunc(
-    var context:Context<Any>,
+    //var context:Context<Any>,
     val name: String, // 函数名
     val functionExpression: JSFunctionExpression // 函数表达式
 ) {

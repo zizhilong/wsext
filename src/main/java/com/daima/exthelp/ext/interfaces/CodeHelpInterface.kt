@@ -10,7 +10,7 @@ import com.jetbrains.rd.generator.nova.PredefinedType
 // 定义 CodeHelp 接口
 interface CodeHelpInterface {
     //返回是否需要准备好准备，如果准备则调用，否则会从新执行一次循环getCodeSuggestions
-    fun RunIng():Boolean
+    fun reParse(psiElement: PsiElement):Boolean
     // 返回代码提示的列表
     fun getCodeSuggestions(psiElement: PsiElement,context: ProcessingContext): List<LookupElementBuilder>
     fun getPrefix(position: PsiElement): Char {

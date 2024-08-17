@@ -33,7 +33,7 @@ dependencies {
   implementation("com.fasterxml.jackson.core:jackson-core:2.12.3")
   implementation("com.fasterxml.jackson.core:jackson-annotations:2.12.3")
   implementation("io.javalin:javalin:6.1.6")
-
+  implementation("mysql:mysql-connector-java:8.0.33")
   implementation("org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:1.8.21")
 }
 tasks {

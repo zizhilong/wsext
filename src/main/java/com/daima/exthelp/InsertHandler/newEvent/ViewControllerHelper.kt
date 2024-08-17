@@ -111,7 +111,7 @@ class ViewControllerHelper(private val project: Project, clsName: String) {
 
         //putUserData
 
-         val evt=item.getUserData(Extclass.EVENTDATA) as Events
+         val evt=item.getUserData(Extclass.EVENT_DATA) as Events
 
         var parastr =""
         var docstr=""
