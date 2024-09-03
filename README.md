@@ -6,4 +6,9 @@
 4.me变量自动提示
 *6.选择表名自动跳model
 
+InlayHints目录为标注
+
+
+
+
 ./gradlew buildPlugin

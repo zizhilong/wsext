@@ -70,5 +70,7 @@ tasks {
       include("**/*.properties")
       filteringCharset = "UTF-8"
     }
+    // 设置重复处理策略
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
   }
 }

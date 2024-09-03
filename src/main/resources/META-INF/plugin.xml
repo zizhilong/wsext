@@ -57,8 +57,20 @@
     </action>
       -->
     <action id="MyPlugin.Action" class="com.daima.exthelp.jsdebug.MyProjectComponent" text="My Action" description="My Action Description">
-      <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt W"/>
+      <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt X"/>
     </action>
+
+    <action
+            id="ToggleAnnotationInlayAction"
+            class="com.daima.exthelp.codeinsight.hints.ToggleAnnotationInlayAction"
+            text="Toggle Annotation Inlay"
+            description="Toggles the Annotation Inlay Provider on or off"
+    >
+      <keyboard-shortcut keymap="$default" first-keystroke="F4"/>
+    </action>
+
+
+
   </actions>
   <!-- Product and plugin compatibility requirements.
        Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
@@ -73,11 +85,17 @@
     <!--<configurationType  implementation="com.example.demo2.rundebugplugin.MyConfigurationType"/>-->
     <!--<localInspection language="JavaScript" shortName="MyCodeInspection" displayName="Inspection" groupName="MyInspections" enabledByDefault="true" implementationClass="com.example.demo2.Inspection.ComparingStringReferencesInspection"/>-->
   </extensions>
-  <!--
   <extensions defaultExtensionNs="com.intellij">
-    <postStartupActivity   implementation="com.daima.exthelp.jsdebug.MyStartupActivity"/>
+    <!--<inlayProvider language="JavaScript" implementationClass="com.daima.exthelp.editor.InlayHints.JSKeywordHintProvider"/>-->
+    <codeInsight.declarativeInlayProvider language="JavaScript" implementationClass="com.daima.exthelp.codeinsight.hints.AnnotationInlayProvider"
+                                          isEnabledByDefault="true"
+                                          group="TYPES_GROUP"
+                                          providerId="java.implicit.types"
+                                          bundle="messages.JavaBundle"
+                                          nameKey="java.implicit.types.inlay.provider.name"
+                                          descriptionKey="settings.inlay.java.implicit.types.description"
+    />
   </extensions>
-  -->
 
   <project-components>
     <component>
