@@ -7,7 +7,6 @@ import com.intellij.lang.javascript.psi.impl.JSLiteralExpressionImpl
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.util.Key
 import com.intellij.psi.*
-import java.util.regex.Pattern
 
 object AnnotationInlayProviderConfig {
     var isEnabled: Boolean = true
@@ -18,8 +17,6 @@ class AnnotationInlayProvider : InlayHintsProvider {
     companion object {
         const val PROVIDER_ID: String = "custom.annotation.hints"
         private val PROCESSED_KEY = Key.create<Boolean>("AnnotationInlayProvider.Processed")
-        // 改进后的正则表达式：匹配全大写字母和下划线的部分
-        private val PATTERN = Pattern.compile("\\b[A-Z_]+\\b")
     }
 
     override fun createCollector(file: PsiFile, editor: Editor): InlayHintsCollector? {
@@ -47,32 +44,46 @@ class AnnotationInlayProvider : InlayHintsProvider {
                     val content = rawText.substring(1, rawText.length - 1)
 
                     // 如果内容长度小于100字符，并且没有非法字符，继续处理
-                    if (content.length <= 100 && content.none { it == '\'' || it == '"' }) {
+                    if (content.length <= 100) {
 
-                        // 使用改进后的正则表达式匹配内容
-                        val matcher = PATTERN.matcher(content)
-                        while (matcher.find()) {
-                            val matchedText = matcher.group()
+                        var index = 0
+                        while (index < content.length) {
+                            val start = index
 
-                            // 先尝试获取列注释
-                            var memo = getColumnComment(matchedText)
-                            if (memo == null) {
-                                // 如果没有找到列注释，尝试获取表注释
-                                memo = getTableComment(matchedText)
+                            // 检查是否是大写字母或下划线
+                            while (index < content.length && (content[index].isUpperCase() || content[index] == '_')) {
+                                index++
                             }
 
-                            if (memo != null) {
-                                // 计算提示位置
-                                val startOffset = element.textRange.startOffset + matcher.start() + 1
-                                val endOffset = startOffset + matchedText.length
+                            // 提取匹配的标识符
+                            if (index > start) {
+                                val matchedText = content.substring(start, index)
 
-                                // 添加 Inlay 提示
-                                sink.addPresentation(InlineInlayPosition(endOffset, true), hasBackground = true) {
-                                    text(memo)
+                                // 先尝试获取列注释
+                                var memo = getColumnComment(matchedText)
+                                if (memo == null) {
+                                    // 如果没有找到列注释，尝试获取表注释
+                                    memo = getTableComment(matchedText)
                                 }
 
-                                // 标记该元素已经处理过
-                                element.putUserData(PROCESSED_KEY, true)
+                                if (memo != null) {
+                                    // 计算提示位置
+                                    val startOffset = element.textRange.startOffset + start + 1
+                                    val endOffset = startOffset + matchedText.length
+
+                                    // 添加 Inlay 提示
+                                    sink.addPresentation(InlineInlayPosition(endOffset, true), hasBackground = true) {
+                                        text(memo)
+                                    }
+
+                                    // 标记该元素已经处理过
+                                    element.putUserData(PROCESSED_KEY, true)
+                                }
+                            }
+
+                            // 跳过不匹配的字符
+                            while (index < content.length && !content[index].isUpperCase() && content[index] != '_') {
+                                index++
                             }
                         }
                     }
