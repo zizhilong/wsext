@@ -5,6 +5,7 @@ import com.daima.exthelp.Tools.selectAndHighlightPsiElement
 import com.intellij.lang.javascript.psi.JSArrayLiteralExpression
 import com.intellij.lang.javascript.psi.JSFile
 import com.intellij.lang.javascript.psi.JSObjectLiteralExpression
+import com.intellij.lang.javascript.psi.JSRecursiveElementVisitor
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.ProjectComponent
 import com.intellij.openapi.diagnostic.Logger
@@ -69,48 +70,44 @@ class MyHttpListener(private val project: Project) : ProjectComponent {
      */
     class MyHandler(private val project: Project) : HttpHandler {
         override fun handle(exchange: HttpExchange) {
-            // 允许所有来源的跨域请求
+            // 允许跨域
             exchange.responseHeaders.add("Access-Control-Allow-Origin", "*")
             exchange.responseHeaders.add("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-            //exchange.responseHeaders.add("Access-Control-Allow-Headers", "Content-Type, x-trace-id")
-            // 允许所有请求头
             exchange.responseHeaders.add("Access-Control-Allow-Headers", "*")
 
-            // 如果是 OPTIONS 请求，直接返回 200 响应
             if (exchange.requestMethod.equals("OPTIONS", ignoreCase = true)) {
                 exchange.sendResponseHeaders(200, -1)
                 return
             }
 
-            // 解析请求中的查询参数
+            // 解析查询参数
             val queryParams = exchange.requestURI.query?.split("&")
                 ?.associate {
                     val (key, value) = it.split("=")
                     key to value
                 }
 
-            // 获取 "data" 参数，并进行处理
             val data = queryParams?.get("data")
+            val paraname = queryParams?.get("paraname") ?: ""
+            val paravalue = queryParams?.get("paravalue") ?: ""
+
             val response = if (data != null) {
-                processRequestData(data, project)
+                processRequestData(data, project, paraname, paravalue)
             } else {
                 "Missing 'data' parameter"
             }
 
-            // 发送响应
+            // 返回响应
             exchange.sendResponseHeaders(200, response.length.toLong())
             exchange.responseBody.use { it.write(response.toByteArray()) }
         }
 
-        /**
-         * 处理请求数据，解码并打开指定文件和行号
-         */
-        private fun processRequestData(data: String, project: Project): String {
+        private fun processRequestData(data: String, project: Project, paraname: String, paravalue: String): String {
             val decodedString = String(Base64.getDecoder().decode(data))
             val parts = decodedString.split("|")
 
             return if (parts.size == 2) {
-                openFileAtLine(project, parts)
+                openFileAtLine(project, parts, paraname, paravalue)
                 "Decoded data: $decodedString"
             } else {
                 "Invalid data format"
@@ -157,12 +154,13 @@ fun parseLineNumberOrIdx(part: String): LineOrPsiIndexResult {
 /**
  * 打开指定的文件并定位到指定的行号或索引
  */
-fun openFileAtLine(project: Project, parts: List<String>) {
-    val filePathPart = parts[0].
-    replace("http://localhost:1841/", "").
-    replace("http://localhost:3000/", "").
-    replace("http://localhost:3001/", "").
-    replace(Regex("\\?.*"), "")
+fun openFileAtLine(project: Project, parts: List<String>, paraname: String, paravalue: String) {
+    val filePathPart = parts[0]
+        .replace("http://localhost:1841/", "")
+        .replace("http://localhost:3000/", "")
+        .replace("http://localhost:3001/", "")
+        .replace(Regex("\\?.*"), "")
+
     val lineNumberOrIdx = parts[1]
 
     // 解析行号或索引
@@ -185,9 +183,9 @@ fun openFileAtLine(project: Project, parts: List<String>) {
                     bringEditorToFront(project) // 将编辑器置于前台
                 }
                 is LineOrPsiIndexResult.PsiIndex -> {
-                    // 查找 PsiFile 并进行跳转
+                    // 查找 PsiFile 并进行跳转，传递 paraname 和 paravalue
                     PsiManager.getInstance(project).findFile(virtualFile)?.let { psiFile ->
-                        navigatePsi(psiFile, result.indices)
+                        navigatePsi(psiFile, result.indices, paraname, paravalue)
                     } ?: println("PsiFile not found: ${file.path}")
                 }
             }
@@ -211,29 +209,101 @@ fun bringEditorToFront(project: Project) {
 /**
  * 根据索引数组导航到指定的 Psi 元素并高亮显示
  */
-fun navigatePsi(file: PsiFile, idx: IntArray) {
+/**
+ * 根据提供的索引数组在 PsiFile 中导航到特定的 JSObjectLiteralExpression 元素，
+ * 并调用 selectAndHighlightPsiElement 函数来高亮或处理该元素。
+ *
+ * @param file PsiFile 对象，必须是 JSFile 类型，代表要解析的文件
+ * @param idx IntArray，包含要导航的索引数组，每个索引代表 JSON 树中一个嵌套的对象
+ * @param paraname String，额外的参数，表示属性名称，用于在 selectAndHighlightPsiElement 中使用
+ * @param paravalue String，额外的参数，表示属性值，用于在 selectAndHighlightPsiElement 中使用
+ */
+fun navigatePsi(file: PsiFile, idx: IntArray, paraname: String, paravalue: String) {
+    // 确保文件类型是 JSFile，否则直接返回
     if (file !is JSFile) return
 
+    // 使用自定义的 Parser 来解析文件中的 JSObjectLiteralExpression
     var parser = Parser("SCR{value define}R{value Ext}<<aO")
     var objLiteral: JSObjectLiteralExpression? = parser.Run(file) as? JSObjectLiteralExpression
 
+    // 当前的索引数组，用于在 JSON 树中逐层导航
     var currentIdx = idx
-    while (objLiteral != null) {
-        val itemsProperty = objLiteral.findProperty("items")
-        val itemsArray = itemsProperty?.value as? JSArrayLiteralExpression
 
-        if (itemsArray == null || itemsArray.expressions.size <= currentIdx.first()) {
-            selectAndHighlightPsiElement(file.project, objLiteral) // 如果没有子节点或超出索引，则高亮当前对象
-            return
-        }
-
-        val newObjLiteral = itemsArray.expressions[currentIdx.first()] as? JSObjectLiteralExpression ?: return
-        objLiteral = newObjLiteral
-        currentIdx = currentIdx.drop(1).toIntArray()
-
-        if (currentIdx.isEmpty()) {
-            selectAndHighlightPsiElement(file.project, objLiteral) // 如果索引数组为空，表示已到最后元素，进行高亮
+    // 如果 paraname 不为空，开始遍历整个文件寻找匹配的对象
+    if (paraname.isNotEmpty()) {
+        val matchingElement = findMatchingPsiElement(file, paraname, paravalue)
+        if (matchingElement != null) {
+            // 如果找到匹配的 Psi 元素，则直接高亮显示
+            selectAndHighlightPsiElement(file.project, matchingElement)
             return
         }
     }
+
+    // 循环遍历对象树中的 items 属性，直到找到目标对象或用尽索引
+    while (objLiteral != null) {
+        // 获取当前对象的 "items" 属性
+        val itemsProperty = objLiteral.findProperty("items")
+
+        // 尝试将 "items" 属性解析为数组，如果失败，则结束循环
+        val itemsArray = itemsProperty?.value as? JSArrayLiteralExpression
+
+        // 如果 itemsArray 为空，或者数组的大小小于当前索引值，表示无法继续导航
+        if (itemsArray == null || itemsArray.expressions.size <= currentIdx.first()) {
+            // 到达目标节点，调用 selectAndHighlightPsiElement 处理或高亮该对象
+            selectAndHighlightPsiElement(file.project, objLiteral)
+            return
+        }
+
+        // 使用当前索引值从数组中获取下一个 JSObjectLiteralExpression 对象
+        val newObjLiteral = itemsArray.expressions[currentIdx.first()] as? JSObjectLiteralExpression ?: return
+
+        // 将当前对象更新为获取到的新对象，继续下一轮循环
+        objLiteral = newObjLiteral
+
+        // 移除已经处理过的索引，继续处理下一个嵌套层级
+        currentIdx = currentIdx.drop(1).toIntArray()
+
+        // 如果索引数组为空，表示已经到达目标对象，进行处理或高亮
+        if (currentIdx.isEmpty()) {
+            selectAndHighlightPsiElement(file.project, objLiteral)
+            return
+        }
+    }
+    /**
+     * 遍历 PsiFile，查找带有特定属性名和属性值的 JSObjectLiteralExpression。
+     *
+     * @param file PsiFile 对象
+     * @param paraname 属性名称
+     * @param paravalue 属性值
+     * @return 找到的 JSObjectLiteralExpression 对象，如果没有找到则返回 null
+     */
+
+}
+fun findMatchingPsiElement(file: PsiFile, paraname: String, paravalue: String): JSObjectLiteralExpression? {
+    // 遍历 PsiFile 中的所有元素
+    val visitor = object : JSRecursiveElementVisitor() {
+        var foundElement: JSObjectLiteralExpression? = null
+
+        override fun visitJSObjectLiteralExpression(expression: JSObjectLiteralExpression) {
+            // 检查对象是否包含属性 paraname
+            val property = expression.findProperty(paraname)
+            if (property != null && property.value != null) {
+                // 获取属性值并去除可能的单引号
+                val valueText = property.value?.text?.removeSurrounding("'")?.removeSurrounding("\"")
+
+                // 检查属性值是否等于 paravalue
+                if (valueText == paravalue) {
+                    foundElement = expression
+                }
+            }
+            // 继续递归遍历
+            super.visitJSObjectLiteralExpression(expression)
+        }
+    }
+
+    // 遍历 PsiFile
+    file.accept(visitor)
+
+    // 返回找到的元素
+    return visitor.foundElement
 }

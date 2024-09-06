@@ -69,7 +69,13 @@
     >
       <keyboard-shortcut keymap="$default" first-keystroke="F4"/>
     </action>
-
+    <action id="CodeGenerationActionGroup"
+            class="com.daima.exthelp.menu.CodeGenerationActionGroup"
+            text="代码生成"
+            description="Generate code snippets from the docs/code directory">
+      <!-- 将 "代码生成" 主菜单添加到代码编辑器的右键菜单 -->
+      <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+    </action>
 
 
   </actions>
