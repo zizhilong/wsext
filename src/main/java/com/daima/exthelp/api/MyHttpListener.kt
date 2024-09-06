@@ -72,7 +72,9 @@ class MyHttpListener(private val project: Project) : ProjectComponent {
             // 允许所有来源的跨域请求
             exchange.responseHeaders.add("Access-Control-Allow-Origin", "*")
             exchange.responseHeaders.add("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-            exchange.responseHeaders.add("Access-Control-Allow-Headers", "Content-Type")
+            //exchange.responseHeaders.add("Access-Control-Allow-Headers", "Content-Type, x-trace-id")
+            // 允许所有请求头
+            exchange.responseHeaders.add("Access-Control-Allow-Headers", "*")
 
             // 如果是 OPTIONS 请求，直接返回 200 响应
             if (exchange.requestMethod.equals("OPTIONS", ignoreCase = true)) {
@@ -156,7 +158,11 @@ fun parseLineNumberOrIdx(part: String): LineOrPsiIndexResult {
  * 打开指定的文件并定位到指定的行号或索引
  */
 fun openFileAtLine(project: Project, parts: List<String>) {
-    val filePathPart = parts[0].replace("http://localhost:1841/", "").replace(Regex("\\?.*"), "")
+    val filePathPart = parts[0].
+    replace("http://localhost:1841/", "").
+    replace("http://localhost:3000/", "").
+    replace("http://localhost:3001/", "").
+    replace(Regex("\\?.*"), "")
     val lineNumberOrIdx = parts[1]
 
     // 解析行号或索引

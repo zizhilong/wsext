@@ -6,6 +6,7 @@ import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.DumbAware
 import com.intellij.psi.PsiDocumentManager
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer
+import com.intellij.openapi.actionSystem.ActionUpdateThread
 
 class ToggleAnnotationInlayAction : ToggleAction("Toggle Annotation Inlay"), DumbAware {
 
@@ -14,6 +15,7 @@ class ToggleAnnotationInlayAction : ToggleAction("Toggle Annotation Inlay"), Dum
     }
 
     override fun setSelected(e: AnActionEvent, state: Boolean) {
+
         // 设置全局启用/禁用状态
         AnnotationInlayProviderConfig.isEnabled = state
 
@@ -39,5 +41,10 @@ class ToggleAnnotationInlayAction : ToggleAction("Toggle Annotation Inlay"), Dum
                 DaemonCodeAnalyzer.getInstance(project).restart(psiFile)
             }
         }
+    }
+
+    override fun getActionUpdateThread(): ActionUpdateThread {
+        // 指定动作更新逻辑在 EDT (Event Dispatch Thread) 中执行
+        return ActionUpdateThread.EDT
     }
 }

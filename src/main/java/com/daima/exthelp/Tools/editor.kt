@@ -12,7 +12,7 @@ import com.intellij.psi.util.PsiUtilBase
 fun selectAndHighlightPsiElement(project: Project, psiElement: PsiElement) {
         // 获取Psi文件和编辑器
         val psiFile = psiElement.containingFile
-        val editor = PsiUtilBase.findEditor(psiFile) ?: return
+        var editor = PsiUtilBase.findEditor(psiFile)
 
         // 检查editor是否属于当前活动的编辑区
         val currentEditor = FileEditorManager.getInstance(project).selectedTextEditor
@@ -21,16 +21,17 @@ fun selectAndHighlightPsiElement(project: Project, psiElement: PsiElement) {
             val virtualFile: VirtualFile = psiFile.virtualFile
             // 跳转到该文件并激活编辑器
             FileEditorManager.getInstance(project).openTextEditor(OpenFileDescriptor(project, virtualFile), true)
+            editor = PsiUtilBase.findEditor(psiFile)
         }
 
         // 获取PsiElement的文本范围
         val textRange: TextRange = psiElement.textRange
-
-        // 选中并滚动到PsiElement
-        editor.selectionModel.setSelection(textRange.startOffset, textRange.endOffset)
-        editor.caretModel.moveToOffset(textRange.startOffset)
-        editor.scrollingModel.scrollToCaret(ScrollType.CENTER)
-
+        if(editor!=null) {
+            // 选中并滚动到PsiElement
+            editor.selectionModel.setSelection(textRange.startOffset, textRange.endOffset)
+            editor.caretModel.moveToOffset(textRange.startOffset)
+            editor.scrollingModel.scrollToCaret(ScrollType.CENTER)
+        }
         /*
         // 高亮PsiElement
         val highlighter = editor.markupModel.addRangeHighlighter(
