@@ -4,6 +4,7 @@ import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.command.WriteCommandAction
+import com.intellij.openapi.editor.CaretModel
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.EditorModificationUtil
 import com.intellij.openapi.fileEditor.FileEditorManager
@@ -27,9 +28,22 @@ class InsertFileContentAction(private val file: VirtualFile) : AnAction(file.nam
             // 将文件中的行分隔符转换为 \n
             content = StringUtil.convertLineSeparators(content)
 
+            val caretModel: CaretModel = editor.caretModel
+            val currentColumn = caretModel.logicalPosition.column
+            val indentation = " ".repeat(currentColumn) // 使用空格填充或根据需要使用 "\t"
+
+            val lines = content.lines()
+            var indentedContent = lines.first()
+            if(lines.size>1){
+                indentedContent+="\n"
+            }
+            indentedContent+=lines.drop(1).joinToString("\n") { line -> indentation+line }
+
+
+
             // 使用 WriteCommandAction 包裹文档修改操作
             WriteCommandAction.runWriteCommandAction(project) {
-                EditorModificationUtil.insertStringAtCaret(editor, content)
+                EditorModificationUtil.insertStringAtCaret(editor, indentedContent)
             }
 
         } catch (ioException: IOException) {
