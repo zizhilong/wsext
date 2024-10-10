@@ -196,13 +196,24 @@ fun openFileAtLine(project: Project, parts: List<String>, paraname: String, para
  * 将编辑器窗口置于前台
  */
 fun bringEditorToFront(project: Project) {
-    EditorFactory.getInstance().allEditors.firstOrNull()?.let { editor ->
-        IdeFocusManager.getInstance(project).requestFocus(editor.contentComponent, true)
-    }
-
     WindowManager.getInstance().suggestParentWindow(project)?.apply {
+        isVisible = true
+        isAlwaysOnTop = true // 临时置顶
         toFront()
         requestFocus()
+        requestFocusInWindow() // 确保窗口本身获得焦点
+
+        // 再给编辑器设置焦点
+        EditorFactory.getInstance().allEditors.firstOrNull()?.let { editor ->
+            IdeFocusManager.getInstance(project).requestFocus(editor.contentComponent, true)
+        }
+
+        // 使用延迟来取消置顶
+        Timer().schedule(object : TimerTask() {
+            override fun run() {
+                isAlwaysOnTop = false // 延迟取消置顶
+            }
+        }, 500)
     }
 }
 
