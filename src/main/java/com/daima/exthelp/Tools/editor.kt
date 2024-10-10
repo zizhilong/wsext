@@ -16,7 +16,7 @@ fun selectAndHighlightPsiElement(project: Project, psiElement: PsiElement) {
 
         // 检查editor是否属于当前活动的编辑区
         val currentEditor = FileEditorManager.getInstance(project).selectedTextEditor
-        if (currentEditor != editor) {
+        if (currentEditor != editor || editor==null) {
             // 获取VirtualFile
             val virtualFile: VirtualFile = psiFile.virtualFile
             // 跳转到该文件并激活编辑器

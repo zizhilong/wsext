@@ -38,10 +38,10 @@
     <action id="com.yourname.jsopener.OpenInBrowserAction" class="com.daima.exthelp.keyhelp.DocAction" text="Open in Browser">
     -->
     <!--CTRF+D打开手册-->
-    <action id="com.yourname.jsopener.OpenInBrowserAction" class="com.daima.exthelp.keyhelp.DocAction" text="Open in Browser">
+    <action id="com.yourname.jsopener.OpenInBrowserAction" class="com.daima.exthelp.keyhelp.DocAction" text="打开手册">
       <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt D"/>
     </action>
-    <action class="com.daima.exthelp.keyhelp.ViewConSwitchAction" text="Open in Browser">
+    <action class="com.daima.exthelp.keyhelp.ViewConSwitchAction" text="切换View和Controller">
       <keyboard-shortcut keymap="$default" first-keystroke="F7"/>
     </action>
     <action class="com.daima.exthelp.ext.FindPsiAction" text="Open in Browser">
