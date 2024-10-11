@@ -82,7 +82,16 @@
   <!-- Product and plugin compatibility requirements.
        Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
   <depends>com.intellij.modules.platform</depends>
-
+  <!--txml扩展名处理-->
+  <extensions defaultExtensionNs="com.intellij">
+    <!-- 注册文件类型 -->
+    <fileType name="ThinkEditor XML File"
+              language="TXML"
+              extensions="txml"
+              implementationClass="com.thinkeditor.TxmlFileType" />
+    <!-- 注册编辑器提供程序 -->
+    <fileEditorProvider implementation="com.thinkeditor.CustomWebEditorProvider"/>
+  </extensions>
   <!-- Extension points defined by the plugin.
        Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
   <extensions defaultExtensionNs="com.intellij">
