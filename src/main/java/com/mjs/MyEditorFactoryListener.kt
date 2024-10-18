@@ -76,7 +76,7 @@ class MyEditorMouseListener(val project: Project, val editor: Editor) : EditorMo
      */
     override fun mouseReleased(event: EditorMouseEvent) {
         // 如果按住了 Ctrl 键且拖动了函数，并且起始文件路径和函数名有效
-        if (isDragging && isCtrlPressed && startFile != null && draggedFunctionName != null) {
+        if (isDragging  && startFile != null && draggedFunctionName != null) {
             // 获取目标文件的路径
             val targetFile = FileDocumentManager.getInstance().getFile(editor.document)
 
@@ -91,21 +91,22 @@ class MyEditorMouseListener(val project: Project, val editor: Editor) : EditorMo
     }
 
     /**
-     * 处理跨文件拖动事件，计算起始文件到目标文件的绝对路径，并插入 import 语句。
+     * 处理跨文件拖动事件，生成项目根路径下的绝对路径，并插入 import 语句。
      */
     private fun handleCrossFileDrag(targetFile: VirtualFile) {
         startFile?.let { sourceFile ->
             // 获取项目根路径
             val projectBasePath = project.basePath ?: return
 
-            // 获取目标文件和起始文件的绝对路径
+            // 获取目标文件的相对路径，去除项目根路径部分
             val targetPath = targetFile.path
-            val sourcePath = sourceFile.path
+            val relativePath = if (targetPath.startsWith(projectBasePath)) {
+                targetPath.substring(projectBasePath.length) // 去掉项目根路径前缀
+            } else {
+                targetPath
+            }
 
-            // 计算目标文件的相对项目根目录的绝对路径
-            val relativePath = targetPath.replaceFirst(projectBasePath, "")
-
-            // 构造 import 语句
+            // 构造 import 语句（使用项目内的绝对路径）
             val importStatement = "import { $draggedFunctionName } from \"$relativePath\";"
             // 在目标文件中插入 import 语句
             insertImportStatement(project, editor, importStatement)
@@ -125,14 +126,16 @@ class MyEditorMouseListener(val project: Project, val editor: Editor) : EditorMo
     }
 
     /**
-     * 在目标文件的编辑器中插入给定的 import 语句。
+     * 在目标文件的编辑器中插入给定的 import 语句到鼠标当前的位置。
      */
     private fun insertImportStatement(project: Project, editor: Editor, importStatement: String) {
         // 使用 WriteCommandAction 确保插入操作的原子性
         WriteCommandAction.runWriteCommandAction(project) {
             val document = editor.document
-            // 在文件头部插入 import 语句
-            document.insertString(0, "$importStatement\n")
+            // 获取当前光标的位置
+            val offset = editor.caretModel.offset
+            // 在当前光标位置插入 import 语句
+            document.insertString(offset, "$importStatement\n")
         }
     }
 
