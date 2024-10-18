@@ -101,6 +101,10 @@
     <!--<configurationType  implementation="com.example.demo2.rundebugplugin.MyConfigurationType"/>-->
     <!--<localInspection language="JavaScript" shortName="MyCodeInspection" displayName="Inspection" groupName="MyInspections" enabledByDefault="true" implementationClass="com.example.demo2.Inspection.ComparingStringReferencesInspection"/>-->
   </extensions>
+  <!--编辑器创建,用于处理鼠标拖动事件-->
+  <extensions defaultExtensionNs="com.intellij">
+    <editorFactoryListener implementation="com.mjs.MyEditorFactoryListener"/>
+  </extensions>
   <extensions defaultExtensionNs="com.intellij">
     <!--<inlayProvider language="JavaScript" implementationClass="com.daima.exthelp.editor.InlayHints.JSKeywordHintProvider"/>-->
     <codeInsight.declarativeInlayProvider language="JavaScript" implementationClass="com.daima.exthelp.codeinsight.hints.AnnotationInlayProvider"
