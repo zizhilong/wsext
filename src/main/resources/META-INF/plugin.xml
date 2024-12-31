@@ -116,7 +116,13 @@
                                           descriptionKey="settings.inlay.java.implicit.types.description"
     />
   </extensions>
+  <extensions defaultExtensionNs="com.intellij">
+    <!--文件目录树标注-->
+    <projectViewNodeDecorator implementation="com.daima.exthelp.filetitle.FileTreeDecoratorKS"/>
+    <!--文件变更监听-->
+    <renameHandler implementation="com.daima.exthelp.rename.ExtJSRenameHandler"  />
 
+  </extensions>
   <project-components>
     <component>
       <implementation-class>com.daima.exthelp.api.MyHttpListener</implementation-class>

@@ -106,3 +106,25 @@ fun findPsiFileForNamespace(baseDir: String, path: String, project: Project): JS
 fun initializeNamespacePaths(psiFile: PsiElement) {
     // 此处可以调用 loadNamespacePaths 方法
 }
+
+fun pathToNamespace(filePath: String, project: Project): String? {
+    loadNamespacePaths(project)
+
+    // 遍历命名空间路径映射表
+    for ((namespace, baseDir) in namespacePathsMap) {
+        // 检查路径是否以基础路径开头
+        if (filePath.startsWith(baseDir)) {
+            // 移除基础路径部分，并替换为命名空间
+            val relativePath = filePath.replaceFirst(baseDir, namespace)
+
+            // 将路径分隔符替换为命名空间分隔符
+            val namespacePath = relativePath.replace('/', '.')
+
+            // 返回完整命名空间
+            return namespacePath
+        }
+    }
+
+    // 如果未匹配到任何命名空间，返回 null
+    return null
+}

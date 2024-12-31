@@ -21,10 +21,8 @@ import com.intellij.psi.PsiManager
 import com.sun.net.httpserver.HttpExchange
 import com.sun.net.httpserver.HttpHandler
 import com.sun.net.httpserver.HttpServer
-import java.awt.Window
 import java.io.File
 import java.io.IOException
-import java.io.OutputStream
 import java.net.InetSocketAddress
 import java.util.*
 
@@ -41,9 +39,10 @@ class MyHttpListener(private val project: Project) : ProjectComponent {
      * 项目打开时触发的事件
      */
     override fun projectOpened() {
-        // 如果项目名称不是 "client_extjs"，则不启动服务器
-        if (project.name != "client_extjs") return
-
+        val file = File(project.basePath+"/app.json")
+        if(!file.exists()){
+            return
+        }
         try {
             // 创建并启动 HTTP 服务器，监听端口 38085
             server = HttpServer.create(InetSocketAddress(38085), 0).apply {
